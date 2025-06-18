@@ -178,7 +178,7 @@ public class HotkeyManager {
     }
     
     // Get a diagnostic summary of hotkey registration
-    func getHotkeyStatus() -> String {
+    public func getHotkeyStatus() -> String {
         var status = "Hotkey Status:\n"
         
         let f1Status = isHotkeyRegistered(id: HotkeyID.toggleBrowsers.rawValue)

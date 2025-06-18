@@ -4,7 +4,7 @@ public class WindowManager {
     public init() {}
     // Browser bundle IDs - from your Hammerspoon script
     private let browserBundleIDs = [
-        "com.apple.Safari", "com.brave.Browser", "com.kagi.kagimacOS",
+        "com.apple.Safari", "com.brave.Browser", "com.kagi.kagimacOS", "org.mozilla.firefoxdeveloperedition",
         "org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome.dev",
         "com.google.Chrome", "company.thebrowser.Browser", "org.mozilla.firefox",
         "org.chromium.Thorium", "com.sigmaos.sigmaos.macos", "com.microsoft.edgemac",
@@ -14,6 +14,7 @@ public class WindowManager {
 
     // Code editor bundle IDs - from your Hammerspoon script
     private let editorBundleIDs = [
+        "com.void",
         "com.microsoft.VSCodeInsiders", "com.exafunction.windsurf", "com.vscodium.VSCodiumInsiders",
         "com.vscodium",
         "io.lapce", "com.microsoft.VSCode",
@@ -33,37 +34,37 @@ public class WindowManager {
 
     // Toggle between browser windows (F1 functionality)
     func toggleBrowserWindows() {
-        print("Attempting to toggle browser windows")
+        Logger.shared.log("Attempting to toggle browser windows")
         switchBetweenApplicationWindows(bundleIDs: browserBundleIDs, windowType: "Browser")
     }
 
     // Toggle between editor windows (F2 functionality)
     func toggleEditorWindows() {
-        print("Attempting to toggle editor windows")
+        Logger.shared.log("Attempting to toggle editor windows")
         switchBetweenApplicationWindows(bundleIDs: editorBundleIDs, windowType: "Code Editor")
     }
 
     // Cycle through browser windows (Cmd+F1 functionality)
     func cycleBrowserWindows(forward: Bool = true) {
-        print("Attempting to cycle browser windows")
+        Logger.shared.log("Attempting to cycle browser windows")
         cycleWindowsOfType(bundleIDs: browserBundleIDs, forward: forward, windowType: "Browser")
     }
 
     // Cycle through editor windows (Cmd+F2 functionality)
     func cycleEditorWindows(forward: Bool = true) {
-        print("Attempting to cycle editor windows")
+        Logger.shared.log("Attempting to cycle editor windows")
         cycleWindowsOfType(bundleIDs: editorBundleIDs, forward: forward, windowType: "Code Editor")
     }
 
     // Toggle between terminal windows (F3 functionality)
     func toggleTerminalWindows() {
-        print("Attempting to toggle terminal windows")
+        Logger.shared.log("Attempting to toggle terminal windows")
         switchBetweenApplicationWindows(bundleIDs: terminalBundleIDs, windowType: "Terminal")
     }
 
     // Cycle through terminal windows (Cmd+F3 functionality)
     func cycleTerminalWindows(forward: Bool = true) {
-        print("Attempting to cycle terminal windows")
+        Logger.shared.log("Attempting to cycle terminal windows")
         cycleWindowsOfType(bundleIDs: terminalBundleIDs, forward: forward, windowType: "Terminal")
     }
 
@@ -82,7 +83,7 @@ public class WindowManager {
             }
         }
 
-        print("Found \(appWindows.count) \(windowType) windows")
+        Logger.shared.log("Found \(appWindows.count) \(windowType) windows")
 
         if appWindows.isEmpty {
             launchDefaultAppForWindowType(windowType)
@@ -116,7 +117,7 @@ public class WindowManager {
             if let secondWindow = appWindows.first(where: {
                 $0.windowID != frontmostWindow.windowID
             }) {
-                print("Switching from current \(windowType) to another \(windowType)")
+                Logger.shared.log("Switching from current \(windowType) to another \(windowType)")
                 focusWindow(secondWindow)
                 updateLastUsedWindow(secondWindow, windowType: windowType)
             }
@@ -131,30 +132,30 @@ public class WindowManager {
                     appWindows.contains(where: { $0.windowID == lastBrowser.windowID })
                 {
                     windowToFocus = lastBrowser
-                    print("Focusing last used browser window: \(lastBrowser.ownerName)")
+                    Logger.shared.log("Focusing last used browser window: \(lastBrowser.ownerName)")
                 } else {
                     windowToFocus = appWindows.first
-                    print("No last used browser or not valid, focusing first browser")
+                    Logger.shared.log("No last used browser or not valid, focusing first browser")
                 }
             } else if windowType == "Code Editor" {
                 if let lastEditor = lastUsedEditorWindow,
                     appWindows.contains(where: { $0.windowID == lastEditor.windowID })
                 {
                     windowToFocus = lastEditor
-                    print("Focusing last used editor window: \(lastEditor.ownerName)")
+                    Logger.shared.log("Focusing last used editor window: \(lastEditor.ownerName)")
                 } else {
                     windowToFocus = appWindows.first
-                    print("No last used editor or not valid, focusing first editor")
+                    Logger.shared.log("No last used editor or not valid, focusing first editor")
                 }
             } else if windowType == "Terminal" {
                 if let lastTerminal = lastUsedTerminalWindow,
                     appWindows.contains(where: { $0.windowID == lastTerminal.windowID })
                 {
                     windowToFocus = lastTerminal
-                    print("Focusing last used terminal window: \(lastTerminal.ownerName)")
+                    Logger.shared.log("Focusing last used terminal window: \(lastTerminal.ownerName)")
                 } else {
                     windowToFocus = appWindows.first
-                    print("No last used terminal or not valid, focusing first terminal")
+                    Logger.shared.log("No last used terminal or not valid, focusing first terminal")
                 }
             } else {
                 windowToFocus = appWindows.first
@@ -169,7 +170,7 @@ public class WindowManager {
 
     // Helper method to update the last used window for a given type
     private func updateLastUsedWindow(_ window: WindowInfo, windowType: String) {
-        print(
+        Logger.shared.log(
             "Updating last used \(windowType) window: \(window.ownerName), ID: \(window.windowID)")
 
         switch windowType {
@@ -197,7 +198,7 @@ public class WindowManager {
             }
         }
 
-        print("Found \(appWindows.count) \(windowType) windows for cycling")
+        Logger.shared.log("Found \(appWindows.count) \(windowType) windows for cycling")
 
         if appWindows.isEmpty {
             launchDefaultAppForWindowType(windowType)
@@ -236,7 +237,7 @@ public class WindowManager {
         }
 
         // Focus next window
-        print("Cycling to next \(windowType), index \(nextIndex)")
+        Logger.shared.log("Cycling to next \(windowType), index \(nextIndex)")
         let nextWindow = sortedWindows[nextIndex]
         focusWindow(nextWindow)
         updateLastUsedWindow(nextWindow, windowType: windowType)
@@ -355,7 +356,7 @@ public class WindowManager {
     }
 
     private func focusWindow(_ window: WindowInfo) {
-        print(
+        Logger.shared.log(
             "Focusing window ID: \(window.windowID), PID: \(window.ownerPID), App: \(window.ownerName)"
         )
 
@@ -363,7 +364,7 @@ public class WindowManager {
         if let app = NSRunningApplication(processIdentifier: pid_t(window.ownerPID)) {
             let success = app.activate(options: .activateIgnoringOtherApps)
             if !success {
-                print("Failed to activate application")
+                Logger.shared.log("Failed to activate application")
                 return
             }
         }
@@ -377,12 +378,12 @@ public class WindowManager {
             appElement, kAXWindowsAttribute as CFString, &windowList)
 
         if error != AXError.success {
-            print("Error getting windows: \(error)")
+            Logger.shared.log("Error getting windows: \(error)")
             return
         }
 
         guard let windowArray = windowList as? [AXUIElement] else {
-            print("Could not cast window list to array")
+            Logger.shared.log("Could not cast window list to array")
             return
         }
 
@@ -396,16 +397,16 @@ public class WindowManager {
                     windowElement, kAXMainAttribute as CFString, kCFBooleanTrue)
                 AXUIElementSetAttributeValue(
                     windowElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
-                print("Window focused successfully")
+                Logger.shared.log("Window focused successfully")
                 return
             }
         }
 
-        print("Could not find window with ID \(window.windowID) in application")
+        Logger.shared.log("Could not find window with ID \(window.windowID) in application")
     }
 
     private func showAlert(message: String) {
-        print("ALERT: \(message)")
+        Logger.shared.log("ALERT: \(message)")
         let alert = NSAlert()
         alert.messageText = message
         alert.alertStyle = .informational
@@ -414,7 +415,7 @@ public class WindowManager {
 
     private func launchDefaultAppForWindowType(_ windowType: String) {
         let bundleID: String?
-        
+
         switch windowType {
         case "Browser":
             bundleID = "com.apple.Safari"
@@ -427,10 +428,11 @@ public class WindowManager {
         }
 
         if let bundleID = bundleID {
-            NSWorkspace.shared.launchApplication(withBundleIdentifier: bundleID,
-                                               options: .default,
-                                               additionalEventParamDescriptor: nil,
-                                               launchIdentifier: nil)
+            NSWorkspace.shared.launchApplication(
+                withBundleIdentifier: bundleID,
+                options: .default,
+                additionalEventParamDescriptor: nil,
+                launchIdentifier: nil)
         } else {
             showAlert(message: "No \(windowType) windows found")
         }

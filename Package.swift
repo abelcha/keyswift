@@ -12,8 +12,11 @@ let package = Package(
             name: "KeyShiftLib",
             targets: ["KeyShift"]),
         .executable(
-            name: "KeyShiftApp",
-            targets: ["KeyShiftApp"])
+            name: "keyshift",
+            targets: ["keyshift"]),
+        .executable(
+            name: "keyshift-logs",
+            targets: ["keyshift-logs"])
     ],
     dependencies: [],
     targets: [
@@ -25,11 +28,15 @@ let package = Package(
                 .headerSearchPath(".")
             ]),
         .executableTarget(
-            name: "KeyShiftApp",
+            name: "keyshift",
             dependencies: ["KeyShift"],
             path: "Sources/KeyShiftApp",
             resources: [
                 .copy("Resources/KeyShift.entitlements")
-            ])
+            ]),
+        .executableTarget(
+            name: "keyshift-logs",
+            dependencies: ["KeyShift"],
+            path: "Sources/KeyShiftLogs")
     ]
 )
