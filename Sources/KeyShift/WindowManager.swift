@@ -1,31 +1,97 @@
 import Cocoa
+import Yams
 
 public class WindowManager {
-    public init() {}
-    // Browser bundle IDs - from your Hammerspoon script
-    private let browserBundleIDs = [
-        "com.apple.Safari", "com.brave.Browser", "com.kagi.kagimacOS", "org.mozilla.firefoxdeveloperedition",
-        "org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome.dev",
-        "com.google.Chrome", "company.thebrowser.Browser", "org.mozilla.firefox",
-        "org.chromium.Thorium", "com.sigmaos.sigmaos.macos", "com.microsoft.edgemac",
-        "com.apple.SafariTechnologyPreview", "com.duckduckgo.macos.browser",
-        "org.torproject.torbrowser",
+    public init() {
+        loadBundleIDs()
+    }
+    // Default bundle IDs
+    private let defaultBrowserBundleIDs = [
+        "com.apple.Safari",
+        "com.google.Chrome",
+        "org.mozilla.firefox"
     ]
+    
+    private let defaultEditorBundleIDs = [
+        "com.microsoft.VSCode",
+        "com.apple.TextEdit"
+    ]
+    
+    private let defaultTerminalBundleIDs = [
+        "com.apple.Terminal",
+        "com.googlecode.iterm2"
+    ]
+    
+    // Bundle IDs merged from defaults and config
+    private var browserBundleIDs: [String] = []
+    private var editorBundleIDs: [String] = []
+    private var terminalBundleIDs: [String] = []
+    
+    private func loadBundleIDs() {
+        // Start with default bundle IDs
+        browserBundleIDs = defaultBrowserBundleIDs
+        editorBundleIDs = defaultEditorBundleIDs
+        terminalBundleIDs = defaultTerminalBundleIDs
+        
+        // Try current directory first, then XDG_CONFIG_HOME
+        let currentDirPath = FileManager.default.currentDirectoryPath + "/keyshift.yaml"
+        let configHome = ProcessInfo.processInfo.environment["XDG_CONFIG_HOME"] ?? "\(NSHomeDirectory())/.config"
+        let xdgConfigPath = "\(configHome)/keyshift.yaml"
+        
+        Logger.shared.log("Checking for config file in current directory: \(currentDirPath)")
+        Logger.shared.log("Checking for config file in XDG config path: \(xdgConfigPath)")
+        Logger.shared.log("Home directory: \(NSHomeDirectory())")
+        Logger.shared.log("XDG_CONFIG_HOME: \(ProcessInfo.processInfo.environment["XDG_CONFIG_HOME"] ?? "not set")")
 
-    // Code editor bundle IDs - from your Hammerspoon script
-    private let editorBundleIDs = [
-        "com.void",
-        "com.microsoft.VSCodeInsiders", "com.exafunction.windsurf", "com.vscodium.VSCodiumInsiders",
-        "com.vscodium",
-        "io.lapce", "com.microsoft.VSCode",
-        "dev.zed.Zed", "com.todesktop.230313mzl4w4u92",
-    ]
-
-    // Terminal bundle IDs
-    private let terminalBundleIDs = [
-        "com.googlecode.iterm2", "com.apple.Terminal", "co.zeit.hyper",
-        "com.github.wez.wezterm", "dev.alacritty", "io.alacritty", "com.kovidgoyal.kitty",
-    ]
+        let configPath: String
+        let configData: String
+        
+        if let currentDirData = try? String(contentsOfFile: currentDirPath, encoding: .utf8) {
+            configPath = currentDirPath
+            configData = currentDirData
+            Logger.shared.log("Using config file from current directory: \(currentDirPath)")
+        } else if let xdgData = try? String(contentsOfFile: xdgConfigPath, encoding: .utf8) {
+            configPath = xdgConfigPath
+            configData = xdgData
+            Logger.shared.log("Using config file from XDG config directory: \(xdgConfigPath)")
+        } else {
+            Logger.shared.log("No config file found in current directory or XDG config, using defaults")
+            return
+        }
+        
+        // Parse YAML using Yams
+        guard let yaml = try? Yams.load(yaml: configData) as? [String: Any],
+              let bundleIDsTable = yaml["bundle_ids"] as? [String: Any] else {
+            Logger.shared.log("Failed to parse YAML config at \(configPath)")
+            return
+        }
+        
+        Logger.shared.log("Full YAML config contents:\n\(configData)")
+        
+        let additionalBrowsers = (bundleIDsTable["browsers"] as? [String]) ?? []
+        Logger.shared.log("Additional browsers from config: \(additionalBrowsers)")
+        
+        let additionalEditors = (bundleIDsTable["editors"] as? [String]) ?? []
+        Logger.shared.log("Additional editors from config: \(additionalEditors)")
+        
+        let additionalTerminals = (bundleIDsTable["terminals"] as? [String]) ?? []
+        Logger.shared.log("Additional terminals from config: \(additionalTerminals)")
+        
+        // Merge defaults with config file entries
+        browserBundleIDs.append(contentsOf: additionalBrowsers)
+        editorBundleIDs.append(contentsOf: additionalEditors)
+        terminalBundleIDs.append(contentsOf: additionalTerminals)
+        
+        // Remove duplicates while preserving order
+        browserBundleIDs = Array(NSOrderedSet(array: browserBundleIDs)) as! [String]
+        editorBundleIDs = Array(NSOrderedSet(array: editorBundleIDs)) as! [String]
+        terminalBundleIDs = Array(NSOrderedSet(array: terminalBundleIDs)) as! [String]
+        
+        Logger.shared.log("Successfully loaded and merged bundle IDs from \(configPath)")
+        Logger.shared.log("Merged browser bundle IDs: \(browserBundleIDs.joined(separator: ", "))")
+        Logger.shared.log("Merged editor bundle IDs: \(editorBundleIDs.joined(separator: ", "))")
+        Logger.shared.log("Merged terminal bundle IDs: \(terminalBundleIDs.joined(separator: ", "))")
+    }
 
     // Track last used window for each category
     private var lastUsedBrowserWindow: WindowInfo?
@@ -420,7 +486,7 @@ public class WindowManager {
         case "Browser":
             bundleID = "com.apple.Safari"
         case "Code Editor":
-            bundleID = "com.microsoft.VSCodeInsiders"
+            bundleID = "com.trae.appspace"
         case "Terminal":
             bundleID = "com.googlecode.iterm2"
         default:

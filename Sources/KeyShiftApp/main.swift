@@ -4,6 +4,13 @@ import Foundation
 
 // Parse command line arguments
 let isDaemon = CommandLine.arguments.contains("--daemon")
+let isInit = CommandLine.arguments.contains("--init")
+
+// Handle init mode
+if isInit {
+    let windowManager = WindowManager()
+    exit(0)
+}
 
 // Daemonize if requested
 if isDaemon {
@@ -68,6 +75,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         Logger.shared.log("KeyShift started" + (isDaemon ? " in daemon mode" : ""))
+        
+        // Initialize window manager
+        _ = windowManager
         
         // Log hotkey registration status
         Logger.shared.log(HotkeyManager.shared.getHotkeyStatus())

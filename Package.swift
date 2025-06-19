@@ -18,11 +18,13 @@ let package = Package(
             name: "keyshift-logs",
             targets: ["keyshift-logs"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0")
+    ],
     targets: [
         .target(
             name: "KeyShift",
-            dependencies: [],
+            dependencies: ["Yams"],
             publicHeadersPath: ".",
             cSettings: [
                 .headerSearchPath(".")
