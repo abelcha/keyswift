@@ -26,6 +26,7 @@ public class HotkeyManager {
         case ctrlF10Forward = 16
         case ctrlF11Forward = 17
         case ctrlF12Forward = 18
+        case cmdEscapePreviousWindow = 19
     }
     
     public static let shared = HotkeyManager(windowManager: WindowManager())
@@ -196,6 +197,13 @@ public class HotkeyManager {
             name: "Ctrl+F12 (Forward F12)"
         )
         
+        registerHotkey(
+            id: HotkeyID.cmdEscapePreviousWindow.rawValue,
+            key: UInt32(kVK_Escape),
+            modifiers: UInt32(cmdKey),
+            name: "Cmd+Escape (Previous Window)"
+        )
+        
         // Log registered hotkeys summary
         print("HotkeyManager: Registered \(registeredHotkeys.count) hotkeys successfully")
     }
@@ -301,6 +309,9 @@ public class HotkeyManager {
             case .ctrlF12Forward:
                 print("HotkeyManager: Forwarding Ctrl+F12 to F12")
                 self.sendFunctionKey(kVK_F12)
+            case .cmdEscapePreviousWindow:
+                print("HotkeyManager: Switching to previous non-editor/terminal/browser window")
+                self.windowManager.switchToPreviousNonStandardWindow()
             }
         }
     }
