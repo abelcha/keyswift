@@ -478,13 +478,55 @@ public class WindowManager {
         alert.alertStyle = .informational
         alert.runModal()
     }
+    
+    func switchToPreviousNonStandardWindow() {
+        Logger.shared.log("Attempting to switch to previous non-standard window")
+        
+        // Get all running applications with their windows
+        let runningApps = getRunningApps()
+        
+        // Filter for windows that are NOT editors, terminals or browsers
+        var appWindows: [WindowInfo] = []
+        for app in runningApps {
+            if let bundleID = app.bundleIdentifier,
+               !browserBundleIDs.contains(bundleID) &&
+               !editorBundleIDs.contains(bundleID) &&
+               !terminalBundleIDs.contains(bundleID) {
+                let windows = getVisibleWindowsForApp(app)
+                appWindows.append(contentsOf: windows)
+            }
+        }
+        
+        Logger.shared.log("Found \(appWindows.count) non-standard windows")
+        
+        if appWindows.isEmpty {
+            Logger.shared.log("No non-standard windows found")
+            return
+        }
+        
+        // Get currently focused window
+        guard let frontmostWindow = getFrontmostWindow() else {
+            if let window = appWindows.first {
+                focusWindow(window)
+            }
+            return
+        }
+        
+        // Find the window to focus (either the previous one or the first available)
+        let windowToFocus = appWindows.first { $0.windowID != frontmostWindow.windowID } ?? appWindows.first
+        
+        if let window = windowToFocus {
+            focusWindow(window)
+        }
+    }
 
     private func launchDefaultAppForWindowType(_ windowType: String) {
         let bundleID: String?
 
         switch windowType {
         case "Browser":
-            bundleID = "com.apple.Safari"
+            bundleID = "com.kagi.kagimacOS"
+            
         case "Code Editor":
             bundleID = "com.trae.appspace"
         case "Terminal":
