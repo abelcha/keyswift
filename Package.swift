@@ -14,17 +14,15 @@ let package = Package(
         .executable(
             name: "keyshift",
             targets: ["keyshift"]),
-        .executable(
-            name: "keyshift-logs",
-            targets: ["keyshift-logs"])
     ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0")
+        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0"),
+        .package(url: "https://github.com/emorydunn/LaunchAgent.git", from: "0.1.0")
     ],
     targets: [
         .target(
             name: "KeyShift",
-            dependencies: ["Yams"],
+            dependencies: ["Yams", "LaunchAgent"],
             publicHeadersPath: ".",
             cSettings: [
                 .headerSearchPath(".")
@@ -34,7 +32,8 @@ let package = Package(
             dependencies: ["KeyShift"],
             path: "Sources/KeyShiftApp",
             resources: [
-                .copy("Resources/KeyShift.entitlements")
+                .copy("Resources/KeyShift.entitlements"),
+                .copy("Resources/browser-icon.svg")
             ]),
         .executableTarget(
             name: "keyshift-logs",

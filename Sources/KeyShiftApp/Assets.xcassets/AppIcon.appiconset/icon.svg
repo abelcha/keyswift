@@ -1,0 +1,51 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="windowGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0051D5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="windowGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#248A3D;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="windowGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D2691E;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#F2F2F7" stroke="#E5E5EA" stroke-width="2"/>
+  
+  <!-- Back window (orange) -->
+  <rect x="120" y="140" width="200" height="140" rx="12" ry="12" fill="url(#windowGradient3)" filter="url(#shadow)"/>
+  <rect x="120" y="140" width="200" height="28" rx="12" ry="12" fill="#FF9500"/>
+  <circle cx="135" cy="154" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="150" cy="154" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="165" cy="154" r="4" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Middle window (green) -->
+  <rect x="160" y="180" width="200" height="140" rx="12" ry="12" fill="url(#windowGradient2)" filter="url(#shadow)"/>
+  <rect x="160" y="180" width="200" height="28" rx="12" ry="12" fill="#34C759"/>
+  <circle cx="175" cy="194" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="190" cy="194" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="205" cy="194" r="4" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Front window (blue) -->
+  <rect x="200" y="220" width="200" height="140" rx="12" ry="12" fill="url(#windowGradient1)" filter="url(#shadow)"/>
+  <rect x="200" y="220" width="200" height="28" rx="12" ry="12" fill="#007AFF"/>
+  <circle cx="215" cy="234" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="230" cy="234" r="4" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="245" cy="234" r="4" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Shift arrow indicator -->
+  <path d="M 340 280 L 360 260 L 380 280 L 370 280 L 370 300 L 350 300 L 350 280 Z" fill="#FFFFFF" opacity="0.9" filter="url(#shadow)"/>
+  
+  <!-- Keyboard key indicator -->
+  <rect x="320" y="380" width="80" height="40" rx="8" ry="8" fill="#8E8E93" filter="url(#shadow)"/>
+  <rect x="324" y="384" width="72" height="32" rx="6" ry="6" fill="#F2F2F7"/>
+  <text x="356" y="404" text-anchor="middle" font-family="SF Pro Display, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#1D1D1F">⌘</text>
+</svg>

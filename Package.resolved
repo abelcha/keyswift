@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LaunchAgent",
+        "repositoryURL": "https://github.com/emorydunn/LaunchAgent.git",
+        "state": {
+          "branch": null,
+          "revision": "9f6d33abfa4a0a45a877e9b884391981c1f4152b",
+          "version": "0.3.0"
+        }
+      },
+      {
+        "package": "Yams",
+        "repositoryURL": "https://github.com/jpsim/Yams.git",
+        "state": {
+          "branch": null,
+          "revision": "3d6871d5b4a5cd519adf233fbb576e0a2af71c17",
+          "version": "5.4.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

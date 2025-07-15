@@ -1,0 +1,424 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A12EA46FEAB53734F6E1E90 /* PrivateAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12202B0DED14E1B783A23C83 /* PrivateAPIs.swift */; };
+		54597B8D405B671257F8E7C5 /* LaunchAgent in Frameworks */ = {isa = PBXBuildFile; productRef = B2EF44D569AE60AB7E015516 /* LaunchAgent */; };
+		6A988A61FBBFAE7B8CBA86CF /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CAE61069FFCCB6C302AF38 /* HotkeyManager.swift */; };
+		6F0F278FB314F9DAE1167CC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316B8FE04C7D913CFCCABD99 /* main.swift */; };
+		7A672C888A1BE38669719C81 /* KeyShiftConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2917EDAF617557B27F655C7 /* KeyShiftConfig.swift */; };
+		7C6C198471AF032EA2A5AA22 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 50D0021A55D5AD880B217941 /* Yams */; };
+		9843431A3950F3C14DA45E20 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5411DA3FC0878EC1D39D16F /* WindowManager.swift */; };
+		B9400F3593E2826C46818A7A /* browser-icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = A45769350FC5B8844A43F81D /* browser-icon.svg */; };
+		EC438D7F866C71F98F4894B7 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A369E52EAA59B38733EC975 /* Logger.swift */; };
+		EFF43DFCFF4AFB4A7AB66203 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EED031AD51B4FB4B068DF03A /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		12202B0DED14E1B783A23C83 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
+		1A369E52EAA59B38733EC975 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		316B8FE04C7D913CFCCABD99 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A45769350FC5B8844A43F81D /* browser-icon.svg */ = {isa = PBXFileReference; path = "browser-icon.svg"; sourceTree = "<group>"; };
+		A47EC52703B36806E22ECACF /* KeyShift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeyShift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9CAE61069FFCCB6C302AF38 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		E2917EDAF617557B27F655C7 /* KeyShiftConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyShiftConfig.swift; sourceTree = "<group>"; };
+		E5411DA3FC0878EC1D39D16F /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		EED031AD51B4FB4B068DF03A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		49FE7CEE54F1148740B844E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C6C198471AF032EA2A5AA22 /* Yams in Frameworks */,
+				54597B8D405B671257F8E7C5 /* LaunchAgent in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		14DB17B86F71A5A01E72CCD2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A47EC52703B36806E22ECACF /* KeyShift.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		569262BBA5D0CC864562FAB9 = {
+			isa = PBXGroup;
+			children = (
+				8BA8F4F9764DF9008E554899 /* Sources */,
+				14DB17B86F71A5A01E72CCD2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8BA8F4F9764DF9008E554899 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E411C74565F08C248740E8A2 /* KeyShift */,
+				BB14CDD2B9F0A905E3219225 /* KeyShiftApp */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		AA48CFC48DA4101AB928514E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A45769350FC5B8844A43F81D /* browser-icon.svg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BB14CDD2B9F0A905E3219225 /* KeyShiftApp */ = {
+			isa = PBXGroup;
+			children = (
+				AA48CFC48DA4101AB928514E /* Resources */,
+				EED031AD51B4FB4B068DF03A /* Assets.xcassets */,
+				316B8FE04C7D913CFCCABD99 /* main.swift */,
+			);
+			path = KeyShiftApp;
+			sourceTree = "<group>";
+		};
+		E411C74565F08C248740E8A2 /* KeyShift */ = {
+			isa = PBXGroup;
+			children = (
+				C9CAE61069FFCCB6C302AF38 /* HotkeyManager.swift */,
+				E2917EDAF617557B27F655C7 /* KeyShiftConfig.swift */,
+				1A369E52EAA59B38733EC975 /* Logger.swift */,
+				12202B0DED14E1B783A23C83 /* PrivateAPIs.swift */,
+				E5411DA3FC0878EC1D39D16F /* WindowManager.swift */,
+			);
+			path = KeyShift;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		77A9E707E1A54F6B72B64E8D /* KeyShift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9440C79605EC723F7A01CEA /* Build configuration list for PBXNativeTarget "KeyShift" */;
+			buildPhases = (
+				8301C1912AA79FE4FFBA0A74 /* Sources */,
+				4E9DC921560655398B3FA352 /* Resources */,
+				49FE7CEE54F1148740B844E0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KeyShift;
+			packageProductDependencies = (
+				50D0021A55D5AD880B217941 /* Yams */,
+				B2EF44D569AE60AB7E015516 /* LaunchAgent */,
+			);
+			productName = KeyShift;
+			productReference = A47EC52703B36806E22ECACF /* KeyShift.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F18D7AB251E395F255A1C4B6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					77A9E707E1A54F6B72B64E8D = {
+						DevelopmentTeam = 2D4G3J6Y8W;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 68A43689702D69E8B9A3FFD9 /* Build configuration list for PBXProject "KeyShift" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 569262BBA5D0CC864562FAB9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				27B0AD3CF849D170CB8B27F2 /* XCRemoteSwiftPackageReference "LaunchAgent" */,
+				6A55A66CAF6F6B255A5FF8B9 /* XCRemoteSwiftPackageReference "Yams" */,
+			);
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				77A9E707E1A54F6B72B64E8D /* KeyShift */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E9DC921560655398B3FA352 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFF43DFCFF4AFB4A7AB66203 /* Assets.xcassets in Resources */,
+				B9400F3593E2826C46818A7A /* browser-icon.svg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8301C1912AA79FE4FFBA0A74 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A988A61FBBFAE7B8CBA86CF /* HotkeyManager.swift in Sources */,
+				7A672C888A1BE38669719C81 /* KeyShiftConfig.swift in Sources */,
+				EC438D7F866C71F98F4894B7 /* Logger.swift in Sources */,
+				2A12EA46FEAB53734F6E1E90 /* PrivateAPIs.swift in Sources */,
+				9843431A3950F3C14DA45E20 /* WindowManager.swift in Sources */,
+				6F0F278FB314F9DAE1167CC9 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2471DD2B0542F4D07C824E90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = KeyShift.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2D4G3J6Y8W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KeyShift;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 KeyShift";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.keyshift.app;
+				PRODUCT_NAME = KeyShift;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4C1F22A1DD080A641A7867FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B5DCA4E8964036E9AF885001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C81F3DC4A587F81F35142CC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = KeyShift.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2D4G3J6Y8W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KeyShift;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 KeyShift";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.keyshift.app;
+				PRODUCT_NAME = KeyShift;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		68A43689702D69E8B9A3FFD9 /* Build configuration list for PBXProject "KeyShift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C1F22A1DD080A641A7867FD /* Debug */,
+				B5DCA4E8964036E9AF885001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D9440C79605EC723F7A01CEA /* Build configuration list for PBXNativeTarget "KeyShift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2471DD2B0542F4D07C824E90 /* Debug */,
+				C81F3DC4A587F81F35142CC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		27B0AD3CF849D170CB8B27F2 /* XCRemoteSwiftPackageReference "LaunchAgent" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/emorydunn/LaunchAgent.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+		6A55A66CAF6F6B255A5FF8B9 /* XCRemoteSwiftPackageReference "Yams" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jpsim/Yams.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		50D0021A55D5AD880B217941 /* Yams */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A55A66CAF6F6B255A5FF8B9 /* XCRemoteSwiftPackageReference "Yams" */;
+			productName = Yams;
+		};
+		B2EF44D569AE60AB7E015516 /* LaunchAgent */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27B0AD3CF849D170CB8B27F2 /* XCRemoteSwiftPackageReference "LaunchAgent" */;
+			productName = LaunchAgent;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F18D7AB251E395F255A1C4B6 /* Project object */;
+}

@@ -1,138 +1,98 @@
 import Cocoa
 import Yams
+// deflare a simple and quick log function:
+let log = Logger.shared.log
+
+public struct AppGroup {
+    public let id: String
+    public let bundleIDs: [String]
+    public let fnKey: Int
+    
+    public init(id: String, bundleIDs: [String], fnKey: Int) {
+        self.id = id
+        self.bundleIDs = bundleIDs
+        self.fnKey = fnKey
+    }
+}
+
+
 
 public class WindowManager {
-    public init() {
-        loadBundleIDs()
+    // Config-driven app groups
+    private let config: KeyShiftConfig
+    private var appGroups: [AppGroup]
+    private var groupsByFnKey: [Int: AppGroup]
+    private var groupsById: [String: AppGroup]
+    
+    // Window focus tracking
+    private var windowFocusTimes: [CGWindowID: Date] = [:]
+    private var lastUsedWindows: [String: WindowInfo] = [:]
+    
+    public init(config: KeyShiftConfig) {
+        self.config = config
+        self.appGroups = config.appGroups
+        self.groupsByFnKey = config.groupsByFnKey
+        self.groupsById = config.groupsById
+        
+        logConfiguration()
     }
-    // Default bundle IDs
-    private let defaultBrowserBundleIDs = [
-        "com.apple.Safari",
-        "com.google.Chrome",
-        "org.mozilla.firefox"
-    ]
-    
-    private let defaultEditorBundleIDs = [
-        "com.microsoft.VSCode",
-        "com.apple.TextEdit"
-    ]
-    
-    private let defaultTerminalBundleIDs = [
-        "com.apple.Terminal",
-        "com.googlecode.iterm2"
-    ]
-    
-    // Bundle IDs merged from defaults and config
-    private var browserBundleIDs: [String] = []
-    private var editorBundleIDs: [String] = []
-    private var terminalBundleIDs: [String] = []
-    
-    private func loadBundleIDs() {
-        // Start with default bundle IDs
-        browserBundleIDs = defaultBrowserBundleIDs
-        editorBundleIDs = defaultEditorBundleIDs
-        terminalBundleIDs = defaultTerminalBundleIDs
-        
-        // Try current directory first, then XDG_CONFIG_HOME
-        let currentDirPath = FileManager.default.currentDirectoryPath + "/keyshift.yaml"
-        let configHome = ProcessInfo.processInfo.environment["XDG_CONFIG_HOME"] ?? "\(NSHomeDirectory())/.config"
-        let xdgConfigPath = "\(configHome)/keyshift.yaml"
-        
-        Logger.shared.log("Checking for config file in current directory: \(currentDirPath)")
-        Logger.shared.log("Checking for config file in XDG config path: \(xdgConfigPath)")
-        Logger.shared.log("Home directory: \(NSHomeDirectory())")
-        Logger.shared.log("XDG_CONFIG_HOME: \(ProcessInfo.processInfo.environment["XDG_CONFIG_HOME"] ?? "not set")")
 
-        let configPath: String
-        let configData: String
-        
-        if let currentDirData = try? String(contentsOfFile: currentDirPath, encoding: .utf8) {
-            configPath = currentDirPath
-            configData = currentDirData
-            Logger.shared.log("Using config file from current directory: \(currentDirPath)")
-        } else if let xdgData = try? String(contentsOfFile: xdgConfigPath, encoding: .utf8) {
-            configPath = xdgConfigPath
-            configData = xdgData
-            Logger.shared.log("Using config file from XDG config directory: \(xdgConfigPath)")
-        } else {
-            Logger.shared.log("No config file found in current directory or XDG config, using defaults")
+    // Log the loaded configuration
+    private func logConfiguration() {
+        Logger.shared.log("Loaded configuration with \(appGroups.count) groups:")
+        for group in appGroups {
+            Logger.shared.log("Group \(group.id) (F\(group.fnKey)): \(group.bundleIDs.joined(separator: ", "))")
+        }
+    }
+
+    // Generic toggle function for any group
+    func toggleWindowsForGroup(_ groupId: String) {
+        guard let group = groupsById[groupId] else {
+            Logger.shared.log("Unknown group: \(groupId)")
             return
         }
-        
-        // Parse YAML using Yams
-        guard let yaml = try? Yams.load(yaml: configData) as? [String: Any],
-              let bundleIDsTable = yaml["bundle_ids"] as? [String: Any] else {
-            Logger.shared.log("Failed to parse YAML config at \(configPath)")
+        Logger.shared.log("Attempting to toggle \(groupId) windows")
+        switchBetweenApplicationWindows(bundleIDs: group.bundleIDs, windowType: groupId.capitalized)
+    }
+
+    // Generic cycle function for any group
+    func cycleWindowsForGroup(_ groupId: String, forward: Bool = true) {
+        guard let group = groupsById[groupId] else {
+            Logger.shared.log("Unknown group: \(groupId)")
             return
         }
-        
-        Logger.shared.log("Full YAML config contents:\n\(configData)")
-        
-        let additionalBrowsers = (bundleIDsTable["browsers"] as? [String]) ?? []
-        Logger.shared.log("Additional browsers from config: \(additionalBrowsers)")
-        
-        let additionalEditors = (bundleIDsTable["editors"] as? [String]) ?? []
-        Logger.shared.log("Additional editors from config: \(additionalEditors)")
-        
-        let additionalTerminals = (bundleIDsTable["terminals"] as? [String]) ?? []
-        Logger.shared.log("Additional terminals from config: \(additionalTerminals)")
-        
-        // Merge defaults with config file entries
-        browserBundleIDs.append(contentsOf: additionalBrowsers)
-        editorBundleIDs.append(contentsOf: additionalEditors)
-        terminalBundleIDs.append(contentsOf: additionalTerminals)
-        
-        // Remove duplicates while preserving order
-        browserBundleIDs = Array(NSOrderedSet(array: browserBundleIDs)) as! [String]
-        editorBundleIDs = Array(NSOrderedSet(array: editorBundleIDs)) as! [String]
-        terminalBundleIDs = Array(NSOrderedSet(array: terminalBundleIDs)) as! [String]
-        
-        Logger.shared.log("Successfully loaded and merged bundle IDs from \(configPath)")
-        Logger.shared.log("Merged browser bundle IDs: \(browserBundleIDs.joined(separator: ", "))")
-        Logger.shared.log("Merged editor bundle IDs: \(editorBundleIDs.joined(separator: ", "))")
-        Logger.shared.log("Merged terminal bundle IDs: \(terminalBundleIDs.joined(separator: ", "))")
+        Logger.shared.log("Attempting to cycle \(groupId) windows")
+        cycleWindowsOfType(bundleIDs: group.bundleIDs, forward: forward, windowType: groupId.capitalized)
     }
-
-    // Track last used window for each category
-    private var lastUsedBrowserWindow: WindowInfo?
-    private var lastUsedEditorWindow: WindowInfo?
-    private var lastUsedTerminalWindow: WindowInfo?
-
-    // Toggle between browser windows (F1 functionality)
-    func toggleBrowserWindows() {
-        Logger.shared.log("Attempting to toggle browser windows")
-        switchBetweenApplicationWindows(bundleIDs: browserBundleIDs, windowType: "Browser")
+    
+    // MARK: - Public Methods
+    
+    public func getFnKeyMappings() -> [Int: String] {
+        var mappings: [Int: String] = [:]
+        for (fnKey, group) in groupsByFnKey {
+            mappings[fnKey] = group.id
+        }
+        return mappings
     }
-
-    // Toggle between editor windows (F2 functionality)
-    func toggleEditorWindows() {
-        Logger.shared.log("Attempting to toggle editor windows")
-        switchBetweenApplicationWindows(bundleIDs: editorBundleIDs, windowType: "Code Editor")
+    
+    // Function key based methods
+    func toggleWindowsForFnKey(_ fnKey: Int) {
+        guard let group = groupsByFnKey[fnKey] else {
+            Logger.shared.log("No group configured for F\(fnKey)")
+            return
+        }
+        toggleWindowsForGroup(group.id)
     }
-
-    // Cycle through browser windows (Cmd+F1 functionality)
-    func cycleBrowserWindows(forward: Bool = true) {
-        Logger.shared.log("Attempting to cycle browser windows")
-        cycleWindowsOfType(bundleIDs: browserBundleIDs, forward: forward, windowType: "Browser")
+    
+    func cycleWindowsForFnKey(_ fnKey: Int, forward: Bool = true) {
+        guard let group = groupsByFnKey[fnKey] else {
+            Logger.shared.log("No group configured for F\(fnKey)")
+            return
+        }
+        cycleWindowsForGroup(group.id, forward: forward)
     }
+    
 
-    // Cycle through editor windows (Cmd+F2 functionality)
-    func cycleEditorWindows(forward: Bool = true) {
-        Logger.shared.log("Attempting to cycle editor windows")
-        cycleWindowsOfType(bundleIDs: editorBundleIDs, forward: forward, windowType: "Code Editor")
-    }
-
-    // Toggle between terminal windows (F3 functionality)
-    func toggleTerminalWindows() {
-        Logger.shared.log("Attempting to toggle terminal windows")
-        switchBetweenApplicationWindows(bundleIDs: terminalBundleIDs, windowType: "Terminal")
-    }
-
-    // Cycle through terminal windows (Cmd+F3 functionality)
-    func cycleTerminalWindows(forward: Bool = true) {
-        Logger.shared.log("Attempting to cycle terminal windows")
-        cycleWindowsOfType(bundleIDs: terminalBundleIDs, forward: forward, windowType: "Terminal")
-    }
 
     // MARK: - Private Methods
 
@@ -150,15 +110,9 @@ public class WindowManager {
         }
 
         Logger.shared.log("Found \(appWindows.count) \(windowType) windows")
-
+            
         if appWindows.isEmpty {
             launchDefaultAppForWindowType(windowType)
-            return
-        }
-
-        if appWindows.count == 1, let window = appWindows.first {
-            focusWindow(window)
-            updateLastUsedWindow(window, windowType: windowType)
             return
         }
 
@@ -180,51 +134,33 @@ public class WindowManager {
 
         if isCurrentWindowOfTargetType {
             // Currently in a window of the target type, so switch to another window of this type
-            if let secondWindow = appWindows.first(where: {
-                $0.windowID != frontmostWindow.windowID
-            }) {
-                Logger.shared.log("Switching from current \(windowType) to another \(windowType)")
+            // Sort windows by most recently used (excluding current window)
+            let otherWindows = appWindows.filter { $0.windowID != frontmostWindow.windowID }
+            let sortedWindows = otherWindows.sorted { window1, window2 in
+                let time1 = windowFocusTimes[window1.windowID] ?? Date.distantPast
+                let time2 = windowFocusTimes[window2.windowID] ?? Date.distantPast
+                return time1 > time2  // Most recent first
+            }
+            
+            if let secondWindow = sortedWindows.first {
+                Logger.shared.log("Switching from current \(windowType) to most recently used \(windowType)")
                 focusWindow(secondWindow)
                 updateLastUsedWindow(secondWindow, windowType: windowType)
             }
         } else {
             // Currently in a window of a different type, try to restore the last used window
             // of the target type, or use the first available one if none was used before
+            let groupId = windowType.lowercased()
             let windowToFocus: WindowInfo?
 
-            if windowType == "Browser" {
-                // Check if we have a recorded last used browser window and if it's still valid
-                if let lastBrowser = lastUsedBrowserWindow,
-                    appWindows.contains(where: { $0.windowID == lastBrowser.windowID })
-                {
-                    windowToFocus = lastBrowser
-                    Logger.shared.log("Focusing last used browser window: \(lastBrowser.ownerName)")
-                } else {
-                    windowToFocus = appWindows.first
-                    Logger.shared.log("No last used browser or not valid, focusing first browser")
-                }
-            } else if windowType == "Code Editor" {
-                if let lastEditor = lastUsedEditorWindow,
-                    appWindows.contains(where: { $0.windowID == lastEditor.windowID })
-                {
-                    windowToFocus = lastEditor
-                    Logger.shared.log("Focusing last used editor window: \(lastEditor.ownerName)")
-                } else {
-                    windowToFocus = appWindows.first
-                    Logger.shared.log("No last used editor or not valid, focusing first editor")
-                }
-            } else if windowType == "Terminal" {
-                if let lastTerminal = lastUsedTerminalWindow,
-                    appWindows.contains(where: { $0.windowID == lastTerminal.windowID })
-                {
-                    windowToFocus = lastTerminal
-                    Logger.shared.log("Focusing last used terminal window: \(lastTerminal.ownerName)")
-                } else {
-                    windowToFocus = appWindows.first
-                    Logger.shared.log("No last used terminal or not valid, focusing first terminal")
-                }
+            if let lastWindow = lastUsedWindows[groupId],
+               appWindows.contains(where: { $0.windowID == lastWindow.windowID })
+            {
+                windowToFocus = lastWindow
+                Logger.shared.log("Focusing last used \(windowType) window: \(lastWindow.ownerName)")
             } else {
                 windowToFocus = appWindows.first
+                Logger.shared.log("No last used \(windowType) or not valid, focusing first \(windowType)")
             }
 
             if let window = windowToFocus {
@@ -238,17 +174,10 @@ public class WindowManager {
     private func updateLastUsedWindow(_ window: WindowInfo, windowType: String) {
         Logger.shared.log(
             "Updating last used \(windowType) window: \(window.ownerName), ID: \(window.windowID)")
-
-        switch windowType {
-        case "Browser":
-            lastUsedBrowserWindow = window
-        case "Code Editor":
-            lastUsedEditorWindow = window
-        case "Terminal":
-            lastUsedTerminalWindow = window
-        default:
-            break
-        }
+        
+        // Find the group ID from the window type
+        let groupId = windowType.lowercased()
+        lastUsedWindows[groupId] = window
     }
 
     private func cycleWindowsOfType(bundleIDs: [String], forward: Bool, windowType: String) {
@@ -293,6 +222,7 @@ public class WindowManager {
             }
             return
         }
+        
 
         // Determine next window index
         var nextIndex: Int
@@ -463,6 +393,10 @@ public class WindowManager {
                     windowElement, kAXMainAttribute as CFString, kCFBooleanTrue)
                 AXUIElementSetAttributeValue(
                     windowElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
+                
+                // Record focus timestamp
+                windowFocusTimes[window.windowID] = Date()
+                
                 Logger.shared.log("Window focused successfully")
                 return
             }
@@ -478,32 +412,34 @@ public class WindowManager {
         alert.alertStyle = .informational
         alert.runModal()
     }
-    
+
     func switchToPreviousNonStandardWindow() {
         Logger.shared.log("Attempting to switch to previous non-standard window")
-        
+
         // Get all running applications with their windows
         let runningApps = getRunningApps()
         
-        // Filter for windows that are NOT editors, terminals or browsers
+        // Collect all bundle IDs from all groups
+        let allManagedBundleIDs = Set(appGroups.flatMap { $0.bundleIDs })
+
+        // Filter for windows that are NOT in any managed group
         var appWindows: [WindowInfo] = []
         for app in runningApps {
             if let bundleID = app.bundleIdentifier,
-               !browserBundleIDs.contains(bundleID) &&
-               !editorBundleIDs.contains(bundleID) &&
-               !terminalBundleIDs.contains(bundleID) {
+                !allManagedBundleIDs.contains(bundleID)
+            {
                 let windows = getVisibleWindowsForApp(app)
                 appWindows.append(contentsOf: windows)
             }
         }
-        
+
         Logger.shared.log("Found \(appWindows.count) non-standard windows")
-        
+
         if appWindows.isEmpty {
             Logger.shared.log("No non-standard windows found")
             return
         }
-        
+
         // Get currently focused window
         guard let frontmostWindow = getFrontmostWindow() else {
             if let window = appWindows.first {
@@ -511,39 +447,29 @@ public class WindowManager {
             }
             return
         }
-        
+
         // Find the window to focus (either the previous one or the first available)
-        let windowToFocus = appWindows.first { $0.windowID != frontmostWindow.windowID } ?? appWindows.first
-        
+        let windowToFocus =
+            appWindows.first { $0.windowID != frontmostWindow.windowID } ?? appWindows.first
+
         if let window = windowToFocus {
             focusWindow(window)
         }
     }
 
     private func launchDefaultAppForWindowType(_ windowType: String) {
-        let bundleID: String?
-
-        switch windowType {
-        case "Browser":
-            bundleID = "com.kagi.kagimacOS"
-            
-        case "Code Editor":
-            bundleID = "com.trae.appspace"
-        case "Terminal":
-            bundleID = "com.googlecode.iterm2"
-        default:
-            bundleID = nil
+        let groupId = windowType.lowercased()
+        guard let group = groupsById[groupId],
+              let bundleID = group.bundleIDs.first else {
+            showAlert(message: "No \(windowType) applications configured")
+            return
         }
 
-        if let bundleID = bundleID {
-            NSWorkspace.shared.launchApplication(
-                withBundleIdentifier: bundleID,
-                options: .default,
-                additionalEventParamDescriptor: nil,
-                launchIdentifier: nil)
-        } else {
-            showAlert(message: "No \(windowType) windows found")
-        }
+        NSWorkspace.shared.launchApplication(
+            withBundleIdentifier: bundleID,
+            options: .default,
+            additionalEventParamDescriptor: nil,
+            launchIdentifier: nil)
     }
 }
 

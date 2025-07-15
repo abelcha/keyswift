@@ -16,6 +16,6 @@ public class Logger {
         )
         
         // Also print to console for terminal output
-        print(message)
+        debugPrint(message)
     }
 }

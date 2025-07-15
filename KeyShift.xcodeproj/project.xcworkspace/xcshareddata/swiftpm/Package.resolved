@@ -1,0 +1,24 @@
+{
+  "originHash" : "9b8e387ed4aa5e81198cc53427527e41867125179a43f26a5fb54bbc8e52fc77",
+  "pins" : [
+    {
+      "identity" : "launchagent",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/emorydunn/LaunchAgent.git",
+      "state" : {
+        "revision" : "9f6d33abfa4a0a45a877e9b884391981c1f4152b",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams.git",
+      "state" : {
+        "revision" : "3d6871d5b4a5cd519adf233fbb576e0a2af71c17",
+        "version" : "5.4.0"
+      }
+    }
+  ],
+  "version" : 3
+}
